@@ -31,23 +31,33 @@ func GetUpdatesChannel(bot *tgbotapi.BotAPI) tgbotapi.UpdatesChannel {
 
 // Take user's input and dispatch it
 func HandleInput(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
+	if upd.EditedMessage != nil {
+		go handleEditedMessage(bot, upd.EditedMessage)
+	}
 	if upd.Message != nil {
 		if upd.Message.IsCommand() {
-			go handleCommand(bot, upd)
+			go handleCommand(bot, upd.Message)
 		} else {
-			go handleMessage(bot, upd)
+			go handleMessage(bot, upd.Message)
 		}
 	}
 }
 
-func handleCommand(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
-	cmd := upd.Message.Command()
-	args := upd.Message.CommandArguments()
+func handleEditedMessage(bot *tgbotapi.BotAPI, eMessage *tgbotapi.Message) {
+	chatID := eMessage.Chat.ID
+	msg := tgbotapi.NewMessage(chatID, "Editing is useless")
+	msg.ReplyToMessageID = eMessage.MessageID
+	bot.Send(msg)
+}
+
+func handleCommand(bot *tgbotapi.BotAPI, cMessage *tgbotapi.Message) {
+	cmd := cMessage.Command()
+	args := cMessage.CommandArguments()
 
 	for _, possibleCommand := range availableCommands {
 		if possibleCommand.name == cmd {
 			go func() {
-				msg := tgbotapi.NewMessage(upd.Message.Chat.ID,
+				msg := tgbotapi.NewMessage(cMessage.Chat.ID,
 					possibleCommand.handler(args),
 				)
 				bot.Send(msg)
@@ -56,16 +66,18 @@ func handleCommand(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
 		}
 	}
 
-	msg := tgbotapi.NewMessage(upd.Message.Chat.ID, "invalid command")
+	msg := tgbotapi.NewMessage(cMessage.Chat.ID, "invalid command")
 	bot.Send(msg)
 }
 
-// pre-condition: upd.Message != nil
-func handleMessage(bot *tgbotapi.BotAPI, upd tgbotapi.Update) {
-	chatID := upd.Message.Chat.ID
-	msg := tgbotapi.NewMessage(chatID, "todo something")
-	msg.ReplyToMessageID = upd.Message.MessageID
-	bot.Send(msg)
+// do the /lookup command
+func handleMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
+	go func() {
+		msg := tgbotapi.NewMessage(message.Chat.ID,
+			availableCommands[0].handler(message.Text),
+		)
+		bot.Send(msg)
+	}()
 }
 
 func makeMenu(bot *tgbotapi.BotAPI) {
