@@ -22,7 +22,7 @@ var (
 					AddDefinitionInfo().
 					AddPronunciationInfo()
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsDescription()
 			},
 		},
 		{
@@ -35,7 +35,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddSynonymConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		{
@@ -48,7 +48,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddAntonymConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		{
@@ -61,7 +61,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddMeaningConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		{
@@ -74,7 +74,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddHypernymConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		{
@@ -87,7 +87,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddHyponymConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		{
@@ -100,7 +100,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddHolonymConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		{
@@ -113,7 +113,7 @@ var (
 				req := datamuse.NewEmptyRequest().
 					AddMeronymConstraint(args)
 				resp := datamuse.MakeRequest(req)
-				return resp.String()
+				return resp.FormatAsWordlist()
 			},
 		},
 		// TODO

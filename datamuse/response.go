@@ -14,10 +14,9 @@ type ResponseData struct {
 }
 
 type Entry struct {
-	Word  string   `json:"word"`
-	Score int      `json:"score"`
-	Tag   Tags     `json:"tags"`
-	Defs  []string `json:"defs"`
+	Word string   `json:"word"`
+	Tag  Tags     `json:"tags"`
+	Defs []string `json:"defs"`
 }
 
 type Tags []string
@@ -36,6 +35,7 @@ func MakeRequest(req *RequestConfig) ResponseData {
 	if len(req.metaFlags) > 0 {
 		url += "&md=" + strings.Join(req.metaFlags, "")
 	}
+	log.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return ResponseData{nil, err}

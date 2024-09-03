@@ -60,6 +60,7 @@ func handleCommand(bot *tgbotapi.BotAPI, cMessage *tgbotapi.Message) {
 				msg := tgbotapi.NewMessage(cMessage.Chat.ID,
 					possibleCommand.handler(args),
 				)
+				msg.ParseMode = tgbotapi.ModeHTML
 				bot.Send(msg)
 			}()
 			return
@@ -76,6 +77,7 @@ func handleMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 		msg := tgbotapi.NewMessage(message.Chat.ID,
 			availableCommands[0].handler(message.Text),
 		)
+		msg.ParseMode = tgbotapi.ModeHTML
 		bot.Send(msg)
 	}()
 }

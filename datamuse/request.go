@@ -17,7 +17,7 @@ func NewEmptyRequest() *RequestConfig {
 func NewCertainWordRequest(word string) *RequestConfig {
 	var req RequestConfig
 	req.params = append(req.params, "sp="+word)
-	req.params = append(req.params, "qe=sp")
+	//req.params = append(req.params, "qe=sp")
 	req.params = append(req.params, "max=1")
 	return &req
 }
